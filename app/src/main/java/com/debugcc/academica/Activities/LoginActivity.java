@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.debugcc.academica.Models.User;
 import com.debugcc.academica.R;
+import com.debugcc.academica.Utils.Utils;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -17,7 +19,6 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -25,7 +26,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -63,6 +63,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        if (Utils.getCurrentUser(LoginActivity.this) != null) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         findViewById(R.id.fake_google_button_login).setOnClickListener(this);
         findViewById(R.id.fake_facebook_button_login).setOnClickListener(this);
@@ -160,27 +166,28 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
-        Log.d(TAG, "handleSignInResult: " + result.isSuccess());
+        //Log.d(TAG, "handleSignInResult: " + result.isSuccess());
         hideProgressDialog();
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount(); /// google account
             if (acct!=null) {
                 firebaseAuthWithGoogle(acct);
-                /*mUser = new User();
-                mUser.userID = acct.getId();
-                mUser.email = acct.getEmail();
-                mUser.name = acct.getDisplayName();
-                if( acct.getPhotoUrl() != null)
-                    mUser.urlProfilePicture = acct.getPhotoUrl().toString();
-                mUser.server = User.GOOGLE_SERVER;*/
 
-                //saveUserAndRedirect();
+                User user = new User();
+                user.setId( acct.getId() );
+                user.setEmail( acct.getEmail() );
+                user.setName( acct.getDisplayName() );
+                if( acct.getPhotoUrl() != null)
+                    user.setUrlProfilePicture( acct.getPhotoUrl().toString() );
+                user.setProvider( User.GOOGLE_PROVIDER );
+
+                saveUserAndRedirect(user);
             }
         } else {
             // Signed out, show unauthenticated UI.
             Log.d(TAG, "handleSignInResult: FAIL " + result.getStatus().toString());
         }
-    }
+    } /// END GOOGLE
 
 
     /// FACEBOOK
@@ -207,26 +214,26 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted (JSONObject object, GraphResponse response) {
-                                Log.e("response: ", response + "");
-                                Log.e("response OBJECT: ", object.toString() + "");
+                                //Log.e("response: ", response + "");
+                                //Log.e("response OBJECT: ", object.toString() + "");
                                 hideProgressDialog();
-                                /*mUser = new User();
+                                User user = new User();
                                 try {
                                     if (object.has("id")) {
-                                        mUser.userID = object.getString("id");
-                                        mUser.urlProfilePicture = "https://graph.facebook.com/" + mUser.userID + "/picture?type=large";
+                                        user.setId( object.getString("id") );
+                                        user.setUrlProfilePicture( "https://graph.facebook.com/" + user.getId() + "/picture?type=large" );
                                     }
                                     if (object.has("email"))
-                                        mUser.email = object.getString("email");
+                                        user.setEmail( object.getString("email") );
                                     if (object.has("name"))
-                                        mUser.name = object.getString("name");
-                                    //mUser.gender = object.getString("gender");
+                                        user.setName( object.getString("name") );
+
                                 }catch (Exception e){
                                     e.printStackTrace();
                                 }
-                                mUser.server = User.FACEBOOK_SERVER;
+                                user.setProvider( User.FACEBOOK_PROVIDER );
 
-                                saveUserAndRedirect();*/
+                                saveUserAndRedirect(user);
                             }
                         });
 
@@ -248,7 +255,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 Log.e(TAG, "onError: " + error.toString() );
             }
         };
-    }
+    } /// END FACEBOOK
 
     private void signOut() {
         /// GOOGLE
@@ -326,6 +333,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+    } /// END FIREBASE
+
+    private void saveUserAndRedirect(User user) {
+        Utils.setCurrentUser(user, LoginActivity.this);
+
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        LoginActivity.this.startActivity(intent);
+        LoginActivity.this.finish();
     }
 
     private void showProgressDialog(String text) {
