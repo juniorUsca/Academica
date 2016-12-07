@@ -10,6 +10,16 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.debugcc.academica.R;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -23,9 +33,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
@@ -36,9 +49,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private GoogleApiClient mGoogleApiClient;
     private ProgressDialog mProgressDialog;
 
+    /// FACEBOOK
+    private CallbackManager mCallbackManager;
+    private LoginButton mLoginFacebookButton;
+
     /// FIREBASE
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private FacebookCallback<LoginResult> mCallBack;
 
 
     @Override
@@ -62,6 +80,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
+        /// FACEBOOK
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        mCallbackManager = CallbackManager.Factory.create();
+        chargeFacebookCallBack();
+
+        mLoginFacebookButton = (LoginButton) findViewById(R.id.facebook_button_login);
+        if (mLoginFacebookButton != null) {
+            mLoginFacebookButton.setReadPermissions("public_profile", "email", "user_friends", "contact_email");
+        }
+
 
         /// FIREBASE
         mAuth = FirebaseAuth.getInstance();
@@ -93,7 +122,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 signInGoogle();
                 break;
             case R.id.fake_facebook_button_login:
-                //signInFacebook();
+                signInFacebook();
                 break;
             case R.id.sign_out_button:
                 signOut();
@@ -105,6 +134,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        /// FACEBOOK
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
 
         /// GOOGLE
         if (requestCode == RC_SIGN_IN) {
@@ -150,6 +182,74 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
     }
 
+
+    /// FACEBOOK
+    private void signInFacebook() {
+        showProgressDialog("Cargando...");
+        mLoginFacebookButton.performClick();
+        mLoginFacebookButton.setPressed(true);
+        mLoginFacebookButton.invalidate();
+        mLoginFacebookButton.registerCallback(mCallbackManager, mCallBack);
+        mLoginFacebookButton.setPressed(false);
+        mLoginFacebookButton.invalidate();
+    }
+
+    private void chargeFacebookCallBack() {
+        mCallBack = new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                firebaseAuthWithFacebook(loginResult.getAccessToken());
+
+                // App code
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted (JSONObject object, GraphResponse response) {
+                                Log.e("response: ", response + "");
+                                Log.e("response OBJECT: ", object.toString() + "");
+                                hideProgressDialog();
+                                /*mUser = new User();
+                                try {
+                                    if (object.has("id")) {
+                                        mUser.userID = object.getString("id");
+                                        mUser.urlProfilePicture = "https://graph.facebook.com/" + mUser.userID + "/picture?type=large";
+                                    }
+                                    if (object.has("email"))
+                                        mUser.email = object.getString("email");
+                                    if (object.has("name"))
+                                        mUser.name = object.getString("name");
+                                    //mUser.gender = object.getString("gender");
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                                mUser.server = User.FACEBOOK_SERVER;
+
+                                saveUserAndRedirect();*/
+                            }
+                        });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender,birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+            }
+
+            @Override
+            public void onCancel() {
+                hideProgressDialog();
+                Log.e(TAG, "onCancel: " );
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                hideProgressDialog();
+                Log.e(TAG, "onError: " + error.toString() );
+            }
+        };
+    }
+
     private void signOut() {
         /// GOOGLE
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -188,6 +288,31 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     }
                 });
     }
+
+    private void firebaseAuthWithFacebook(AccessToken token) {
+        Log.d(TAG, "handleFacebookAccessToken:" + token);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "signInWithCredential:onComplete: LOGUEADO CON FACEBOOK" + task.isSuccessful());
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "signInWithCredential", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
 
     @Override
     protected void onStart() {
