@@ -3,6 +3,9 @@ package com.debugcc.academica.Activities;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +20,8 @@ import com.debugcc.academica.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,9 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        MenuItem item = navigationView.getMenu().findItem( R.id.nav_all_events );
+        onNavigationItemSelected(item);
     }
 
     @Override
@@ -50,7 +58,11 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (getFragmentManager().getBackStackEntryCount() > 0) {
+                getFragmentManager().popBackStack();
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 
@@ -79,25 +91,35 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+        Fragment genericFragment = null;
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_my_events) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_all_events) {
+            //genericFragment = MapsFragment.newInstance("hola1","hola2");
+            Log.d(TAG, "onNavigationItemSelected: " + "NAV ALL MOSTRAR");
+        } else if (id == R.id.nav_logout) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_create_event) {
 
-        } else if (id == R.id.nav_share) {
+        }
 
-        } else if (id == R.id.nav_send) {
+        if (genericFragment != null) {
+            fragmentManager
+                    .beginTransaction()
+                    .replace(R.id.content_main, genericFragment)
+                    .commit();
 
+            setTitle(item.getTitle());
+            item.setChecked(true);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }
