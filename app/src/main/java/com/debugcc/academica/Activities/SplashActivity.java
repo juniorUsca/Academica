@@ -7,12 +7,18 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
+import com.debugcc.academica.Models.Event;
 import com.debugcc.academica.R;
+import com.debugcc.academica.Utils.FirebaseTasks;
+
+import java.util.List;
 
 public class SplashActivity extends AppCompatActivity {
 
+    private static final String TAG = "SPLASH ACTIVITY";
     private final int SPLASH_DISPLAY_LENGTH = 3000;
 
     @Override
@@ -22,6 +28,13 @@ public class SplashActivity extends AppCompatActivity {
 
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
+
+        FirebaseTasks.getAllEvents(new FirebaseTasks.OnEventsUpdatedListener() {
+            @Override
+            public void onEventsUpdated(List<Event> events) {
+                /// All events
+            }
+        });
 
         new Handler().postDelayed(new Runnable(){
             @Override

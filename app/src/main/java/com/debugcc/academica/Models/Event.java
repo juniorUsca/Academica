@@ -1,24 +1,29 @@
 package com.debugcc.academica.Models;
 
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
 public class Event {
-    public String nombre;
-    public String descripcion;
-    public String lugar;
-    public String fecha;
-    public String hora;
-    public String precio;
-    public String imagen;
-    public Double lat;
-    public Double lng;
+
+    @Exclude
+    private String id;
+    private String nombre;
+    private String descripcion;
+    private String lugar;
+    private String fecha;
+    private String hora;
+    private String precio;
+    private String imagen;
+    private Double lat;
+    private Double lng;
 
     public Event() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Event(String nombre, String descripcion, String lugar, String fecha, String hora, String precio, String imagen, Double lat, Double lng) {
+    public Event(String id, String nombre, String descripcion, String lugar, String fecha, String hora, String precio, String imagen, Double lat, Double lng) {
+        this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.lugar = lugar;
@@ -28,6 +33,14 @@ public class Event {
         this.imagen = imagen;
         this.lat = lat;
         this.lng = lng;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -100,5 +113,21 @@ public class Event {
 
     public void setLng(Double lng) {
         this.lng = lng;
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "id='" + id + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", lugar='" + lugar + '\'' +
+                ", fecha='" + fecha + '\'' +
+                ", hora='" + hora + '\'' +
+                ", precio='" + precio + '\'' +
+                ", imagen='" + imagen + '\'' +
+                ", lat=" + lat +
+                ", lng=" + lng +
+                '}';
     }
 }

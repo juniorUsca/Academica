@@ -21,9 +21,17 @@ public class EventGridAdapter extends RecyclerView.Adapter<EventGridAdapter.View
     private List<Event> mDataSet;
     private OnItemClickListener mListener;
 
+    public EventGridAdapter() {
+    }
+
     public EventGridAdapter(List<Event> mDataSet) {
         this.mDataSet = mDataSet;
     }
+
+    public void setdataSet(List<Event> mDataSet) {
+        this.mDataSet = mDataSet;
+    }
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.mListener = listener;
     }
