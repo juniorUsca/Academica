@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.debugcc.academica.Fragments.AllEventsFragment;
 import com.debugcc.academica.R;
 
 public class MainActivity extends AppCompatActivity
@@ -99,8 +100,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_my_events) {
 
         } else if (id == R.id.nav_all_events) {
-            //genericFragment = MapsFragment.newInstance("hola1","hola2");
-            Log.d(TAG, "onNavigationItemSelected: " + "NAV ALL MOSTRAR");
+            genericFragment = AllEventsFragment.newInstance();
         } else if (id == R.id.nav_logout) {
 
         } else if (id == R.id.nav_create_event) {

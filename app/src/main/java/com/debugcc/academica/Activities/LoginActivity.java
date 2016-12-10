@@ -64,6 +64,29 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
+        /// FIREBASE
+        mAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in: FIREBASE");
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getPhotoUrl());
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getDisplayName());
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getEmail());
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+                // ...
+            }
+        }; /// END FIREBASE
+
         if (Utils.getCurrentUser(LoginActivity.this) != null) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
@@ -97,28 +120,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             mLoginFacebookButton.setReadPermissions("public_profile", "email", "user_friends", "contact_email");
         }
 
-
-        /// FIREBASE
-        mAuth = FirebaseAuth.getInstance();
-
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in: FIREBASE");
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getPhotoUrl());
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getDisplayName());
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getEmail());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                // ...
-            }
-        };
     }
 
     @Override

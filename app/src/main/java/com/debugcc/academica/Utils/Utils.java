@@ -1,6 +1,8 @@
 package com.debugcc.academica.Utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.DisplayMetrics;
 
 import com.debugcc.academica.Models.ComplexPreferences;
 import com.debugcc.academica.Models.User;
@@ -23,5 +25,19 @@ public class Utils {
         ComplexPreferences complexPreferences = ComplexPreferences.getComplexPreferences(ctx, "user_prefs", 0);
         complexPreferences.clearObject();
         complexPreferences.commit();
+    }
+
+
+
+
+    public static int getDeviceWidth( Context ctx) {
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        ((Activity)ctx).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        return displaymetrics.widthPixels;
+    }
+    public static int getDeviceHeight( Context ctx) {
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        ((Activity)ctx).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        return displaymetrics.heightPixels;
     }
 }
