@@ -258,20 +258,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         };
     } /// END FACEBOOK
 
-    private void signOut() {
-        /// GOOGLE
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        Log.d(TAG, "onResult: SALIO CERRO SESION");
-                    }
-                });
-
-        /// FIREBASE
-        FirebaseAuth.getInstance().signOut();
-    }
-
 
     /// FIREBASE
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
