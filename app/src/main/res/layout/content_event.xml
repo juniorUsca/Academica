@@ -6,12 +6,84 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.debugcc.academica.Activities.EventActivity"
-    tools:showIn="@layout/activity_event">
+    tools:showIn="@layout/activity_event"
+    android:layout_margin="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+    <RelativeLayout android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/medium_text"
+            android:layout_gravity="center"
+            android:id="@+id/event_textView_description"
+            android:layout_below="@+id/event_textView_price"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="13/123/132"
+            android:id="@+id/event_textView_date"
+            android:textStyle="normal|bold"
+            android:layout_marginTop="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/event_textViewDate"
+            android:layout_toEndOf="@+id/event_textViewDate" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fecha: "
+            android:id="@+id/event_textViewDate"
+            android:textStyle="normal|bold"
+            android:layout_alignBaseline="@+id/event_textView_date"
+            android:layout_alignBottom="@+id/event_textView_date"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Costo: "
+            android:layout_gravity="right"
+            android:id="@+id/event_textViewPrice"
+            android:textStyle="normal|bold"
+            android:layout_alignBaseline="@+id/event_textView_date"
+            android:layout_alignBottom="@+id/event_textView_date"
+            android:layout_toLeftOf="@+id/event_textView_price"
+            android:layout_toStartOf="@+id/event_textView_price" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Free"
+            android:layout_gravity="right"
+            android:id="@+id/event_textView_price"
+            android:textStyle="normal|bold"
+            android:layout_alignBottom="@+id/event_textViewPrice"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/event_textViewPrice" />
+
+        <fragment
+            android:id="@+id/event_map"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_below="@+id/event_textView_description"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="16dp"/>
+        <!--
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            class="com.google.android.gms.maps.SupportMapFragment" />
+        -->
+
+    </RelativeLayout>
+
 
 </android.support.v4.widget.NestedScrollView>

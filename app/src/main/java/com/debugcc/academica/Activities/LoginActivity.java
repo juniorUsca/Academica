@@ -95,7 +95,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         findViewById(R.id.fake_google_button_login).setOnClickListener(this);
         findViewById(R.id.fake_facebook_button_login).setOnClickListener(this);
-        findViewById(R.id.sign_out_button).setOnClickListener(this);
 
         /// GOOGLE
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -131,10 +130,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             case R.id.fake_facebook_button_login:
                 signInFacebook();
                 break;
-            case R.id.sign_out_button:
-                signOut();
-                break;
-            // ...
         }
     }
 

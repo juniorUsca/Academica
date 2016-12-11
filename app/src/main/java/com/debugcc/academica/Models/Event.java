@@ -130,4 +130,7 @@ public class Event {
                 ", lng=" + lng +
                 '}';
     }
+
+    @Exclude
+    public static Event CURRENT_EVENT = null;
 }

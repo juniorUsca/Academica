@@ -1,12 +1,15 @@
 package com.debugcc.academica.Activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -17,7 +20,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.debugcc.academica.Fragments.AllEventsFragment;
 import com.debugcc.academica.Models.User;
 import com.debugcc.academica.R;
@@ -66,7 +73,6 @@ public class MainActivity extends AppCompatActivity
         MenuItem item = navigationView.getMenu().findItem( R.id.nav_all_events );
         onNavigationItemSelected(item);
 
-
         /// PreLogout
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -78,6 +84,36 @@ public class MainActivity extends AppCompatActivity
 
         mUser = Utils.getCurrentUser(this);
         /// END PreLogout
+
+        chargeProfile();
+    }
+
+    private void chargeProfile() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+
+        final ImageView user_profile = (ImageView) header.findViewById(R.id.user_picture);
+        TextView user_name = (TextView) header.findViewById(R.id.user_name);
+        TextView user_email = (TextView) header.findViewById(R.id.user_email);
+
+        Glide.with(this)
+                .load(mUser.getUrlProfilePicture())
+                .asBitmap()
+                .centerCrop()
+                .error(R.drawable.ic_action_user)
+                .into(new BitmapImageViewTarget(user_profile) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable circularBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(getBaseContext().getResources(), resource);
+                        circularBitmapDrawable.setCircular(true);
+                        user_profile.setImageDrawable(circularBitmapDrawable);
+                    }
+                });
+
+        user_name.setText(mUser.getName());
+        user_email.setText(mUser.getEmail());
+
     }
 
     @Override
@@ -130,8 +166,8 @@ public class MainActivity extends AppCompatActivity
             genericFragment = AllEventsFragment.newInstance();
         } else if (id == R.id.nav_logout) {
             signOut();
-            Intent i = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(i);
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
             finish();
         } else if (id == R.id.nav_create_event) {
 

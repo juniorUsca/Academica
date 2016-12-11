@@ -72,7 +72,10 @@ public class AllEventsFragment extends Fragment {
         ((EventGridAdapter) mEventGridAdapter).setOnItemClickListener(new EventGridAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos, Event event) {
+                Event.CURRENT_EVENT = event;
 
+                Intent intent = new Intent(getContext(), EventActivity.class);
+                getContext().startActivity(intent);
             }
         });
     }

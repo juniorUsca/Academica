@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#FE9A2E</color>
     <color name="colorAccent">#0096d2</color> <!-- ceruleo -->
 
+    <color name="colorRed">#FF5555</color>
+
     <color name="facebook_button_background_color">#00f</color>
     <color name="google_button_background_color">#F44336</color>
     <color name="login_button_text_color">#eee</color>
