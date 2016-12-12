@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.debugcc.academica.Fragments.AllEventsFragment;
+import com.debugcc.academica.Fragments.UserEventsFragment;
 import com.debugcc.academica.Models.User;
 import com.debugcc.academica.R;
 import com.debugcc.academica.Utils.Utils;
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "MainActivity";
+    public static Integer CURRENT_TAB = 0;
+    public static Integer ALL_EVENTS_TAB;
+    public static Integer USER_EVENTS_TAB;
     private GoogleApiClient mGoogleApiClient;
     private User mUser;
 
@@ -70,7 +74,11 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        MenuItem item = navigationView.getMenu().findItem( R.id.nav_all_events );
+        ALL_EVENTS_TAB = R.id.nav_all_events;
+        USER_EVENTS_TAB = R.id.nav_my_events;
+        if (CURRENT_TAB.equals(0))
+            CURRENT_TAB = ALL_EVENTS_TAB;
+        MenuItem item = navigationView.getMenu().findItem( CURRENT_TAB );
         onNavigationItemSelected(item);
 
         /// PreLogout
@@ -161,7 +169,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_my_events) {
-
+            genericFragment = UserEventsFragment.newInstance();
         } else if (id == R.id.nav_all_events) {
             genericFragment = AllEventsFragment.newInstance();
         } else if (id == R.id.nav_logout) {

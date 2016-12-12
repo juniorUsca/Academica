@@ -6,8 +6,8 @@
 
     <color name="colorRed">#FF5555</color>
 
-    <color name="facebook_button_background_color">#00f</color>
-    <color name="google_button_background_color">#F44336</color>
+    <color name="facebook_button_background_color">#3b5998</color>
+    <color name="google_button_background_color">#dd4b39</color>
     <color name="login_button_text_color">#eee</color>
 
     <color name="background_gray_transparent">#88000000</color>
