@@ -6,7 +6,7 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_my_events"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_menu_slideshow"
             android:title="Mis Eventos" />
         <item
             android:id="@+id/nav_all_events"
@@ -14,7 +14,7 @@
             android:title="Todos los Eventos" />
         <item
             android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_power_settings_new_white_24dp"
             android:title="Salir" />
     </group>
 
@@ -23,7 +23,7 @@
         android:checkableBehavior="none">
         <item
             android:id="@+id/nav_create_event"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_library_add_black_24dp"
             android:title="Crear Evento" />
     </group>
 </menu>
