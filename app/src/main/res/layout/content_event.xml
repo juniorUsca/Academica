@@ -15,18 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/medium_text"
-            android:layout_gravity="center"
-            android:id="@+id/event_textView_description"
-            android:layout_below="@+id/event_textView_price"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="16dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="13/123/132"
+            android:text="25/12/2016"
             android:id="@+id/event_textView_date"
             android:textStyle="normal|bold"
             android:layout_marginTop="25dp"
@@ -72,12 +61,46 @@
         <fragment
             android:id="@+id/event_map"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="300dp"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_below="@+id/event_textView_description"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
             android:layout_marginTop="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lugar: "
+            android:layout_gravity="left"
+            android:id="@+id/event_textViewAddress"
+            android:textStyle="normal|bold"
+            android:layout_alignBaseline="@+id/event_textView_address"
+            android:layout_alignBottom="@+id/event_textView_address"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Calle"
+            android:layout_gravity="right"
+            android:id="@+id/event_textView_address"
+            android:textStyle="normal|bold"
+
+            android:layout_below="@+id/event_textView_date"
+            android:layout_toRightOf="@+id/event_textViewDate"
+            android:layout_toEndOf="@+id/event_textViewDate" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descripcion"
+            android:layout_gravity="center"
+            android:id="@+id/event_textView_description"
+            android:layout_marginTop="14dp"
+            android:layout_below="@+id/event_textViewAddress"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
         <!--
             android:name="com.google.android.gms.maps.SupportMapFragment"
             class="com.google.android.gms.maps.SupportMapFragment" />

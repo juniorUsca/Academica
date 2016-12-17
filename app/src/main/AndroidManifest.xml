@@ -10,8 +10,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:largeHeap="true"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".Activities.SplashActivity"
@@ -37,8 +37,7 @@
         </activity>
         <activity
             android:name=".Activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.EventActivity"
             android:label="@string/title_activity_event"
@@ -46,6 +45,18 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Activities.CategoriesActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Activities.CategoryActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.CategoriesActivity" />
         </activity>
 
         <meta-data

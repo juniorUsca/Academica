@@ -108,6 +108,44 @@ public class FirebaseTasks {
         });
     }
 
+    public static void getCategoryEvents(final OnEventsUpdatedListener listener, String category) {
+        DatabaseReference reference = getDatabase().child("eventos/" + category);
+
+        reference.orderByValue().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onDataChange: OBTENIENDO EVENTOS" );
+
+                List<Event> events = new ArrayList<>();
+
+                Iterable<DataSnapshot> ds_ev = dataSnapshot.getChildren();
+                for (DataSnapshot ds : ds_ev) {
+                    Event item = new Event();
+                    item.setId(ds.getKey());
+                    item.setNombre(ds.child("nombre").getValue(String.class));
+                    item.setDescripcion(ds.child("descripcion").getValue(String.class));
+                    item.setLugar(ds.child("lugar").getValue(String.class));
+                    item.setFecha(ds.child("fecha").getValue(String.class));
+                    item.setHora(ds.child("hora").getValue(String.class));
+                    item.setPrecio(ds.child("precio").getValue(String.class));
+                    item.setImagen(ds.child("imagen").getValue(String.class));
+                    item.setLat(ds.child("lat").getValue(Double.class));
+                    item.setLng(ds.child("lng").getValue(Double.class));
+
+                    events.add(item);
+                }
+
+                if (listener != null)
+                    listener.onEventsUpdated(events);
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "onCancelled: ", databaseError.toException());
+            }
+        });
+    }
+
     public interface OnEventsUpdatedListener {
         void onEventsUpdated(List<Event> events);
     }

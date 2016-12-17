@@ -38,6 +38,8 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
 
     private static final String TAG = "EVENTACTIVITY";
     private boolean userEvent;
+    private boolean categoryEventBool;
+    private String categoryEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,11 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
         userEvent = getIntent().getBooleanExtra("USER_EVENT", false);
         if (userEvent) {
             findViewById(R.id.event_fab_assist).setVisibility(View.GONE);
+        }
+        categoryEventBool = getIntent().getBooleanExtra("CATEGORY_EVENT_BOOL", false);
+        if (userEvent) {
+            findViewById(R.id.event_fab_assist).setVisibility(View.GONE);
+            categoryEvent = getIntent().getStringExtra("CATEGORY_EVENT");
         }
 
         updateUI();
@@ -87,7 +94,12 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
                 MainActivity.CURRENT_TAB = MainActivity.ALL_EVENTS_TAB;
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                navigateUpTo(new Intent(this, MainActivity.class));
+                if (categoryEventBool) {
+                    Intent intent= new Intent(this, MainActivity.class);
+                    intent.putExtra("CATEGORY_EVENT", categoryEvent);
+                    navigateUpTo(intent);
+                } else
+                    navigateUpTo(new Intent(this, MainActivity.class));
             }
             return true;
         }
@@ -100,6 +112,7 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
         if ( Event.CURRENT_EVENT != null) {
             ((TextView) findViewById(R.id.event_textView_date)).setText(Event.CURRENT_EVENT.getFecha() + " " + Event.CURRENT_EVENT.getHora());
             ((TextView) findViewById(R.id.event_textView_price)).setText(Event.CURRENT_EVENT.getPrecio());
+            ((TextView) findViewById(R.id.event_textView_address)).setText(Event.CURRENT_EVENT.getLugar());
             ((TextView) findViewById(R.id.event_textView_description)).setText(Event.CURRENT_EVENT.getDescripcion());
 
             net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout appBarLayout = (net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout) findViewById(R.id.event_toolbar_layout);
@@ -162,8 +175,8 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
                 .setContentUrl(Uri.parse("https://developers.facebook.com"))
                 .build();*/
 
-        //String urlToShare = "http://intranet2.ingemmet.gob.pe:85/Geoparques/Public/img/sede/sede_local.jpg";
-        String urlToShare = Event.CURRENT_EVENT.getImagen();
+        String urlToShare = "https://play.google.com/store/apps/details?id=com.debugcc.academica";
+        //String urlToShare = Event.CURRENT_EVENT.getImagen();
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, urlToShare);

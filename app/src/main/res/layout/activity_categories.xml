@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_categories"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.debugcc.academica.Activities.CategoriesActivity">
+    <View android:background="#ffffff"
+        android:layout_width = "match_parent"
+        android:layout_height="10dp"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@drawable/ingenieria"
+        android:id="@+id/category_ingenieria"
+        android:scaleType="centerCrop"/>
+
+    <View android:background="#ffffff"
+        android:layout_width = "match_parent"
+        android:layout_height="10dp"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@drawable/social"
+        android:id="@+id/category_social"
+        android:scaleType="centerCrop"/>
+
+    <View android:background="#ffffff"
+        android:layout_width = "match_parent"
+        android:layout_height="10dp"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@drawable/biomedica"
+        android:id="@+id/category_biomedica"
+        android:scaleType="centerCrop"/>
+
+    <View android:background="#ffffff"
+        android:layout_width = "match_parent"
+        android:layout_height="10dp"/>
+</LinearLayout>

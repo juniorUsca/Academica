@@ -14,7 +14,7 @@
             android:title="Todos los Eventos" />
         <item
             android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_power_settings_new_white_24dp"
+            android:icon="@drawable/ic_power_settings_new"
             android:title="Salir" />
     </group>
 
@@ -23,7 +23,7 @@
         android:checkableBehavior="none">
         <item
             android:id="@+id/nav_create_event"
-            android:icon="@drawable/ic_library_add_black_24dp"
+            android:icon="@drawable/ic_library_add"
             android:title="Crear Evento" />
     </group>
 </menu>
